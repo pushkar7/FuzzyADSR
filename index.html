@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fuzzy ADSR</title>
+    <!-- add the personal css sheet and bootstrap css framework -->
+    <link rel="stylesheet" type="text/css" href="include/CSS/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+    <!-- SImple header navigation bar to display the title-->>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Fuzzy ADSR classifier</a>
+    </nav>
+    <!-- we use a container to make the app responsive for any device -->
+    <div class="container mt-5">
+        <!-- entry point for our vue js component -->
+        <div id="app">
+            <h1>Type of envelope:</h1>
+            <!-- the sharpness value will be displayed here -->
+            <h5>Sharpness from 0 (very sharp) to 10 (very smooth): <span>{{ sharpness }}</span></h5>
+            <!-- render the envelope component -->
+            <envelope-generator
+                    :width="600"
+                    :height="200"
+                    :attack="form.attackTime"
+                    :decay="form.decayTime"
+                    :sustain="form.sustainLevel"
+                    :release="form.releaseTime"
+                    @envelope-sharpness="getSharpness">
+            </envelope-generator>
+            <!-- 4 sliders to change the inputs -->
+            <form class="envelope-controller">
+                <div class="form-group">
+
+     <label>Attack:</label>
+                    <div>0 ms - 200 ms</div>
+                        <input id="myinput" type="range" class="slider" min="0" max="1" step="0.01" value="0" v-model.number="form.attackTime">
+                </div>
+                <div class="form-group">
+                    <label>Decay:</label>
+                    <input type="range" id="myinput" class="slider" min="0" max="1" step="0.01" value="0" v-model.number="form.decayTime">
+                </div>
+                <div class="form-group">
+                    <label>Sustain:</label>
+                    <input id="myinput" type="range" class="slider" min="0" max="1" value="0" step="0.01" v-model.number="form.sustainLevel">
+                </div>
+                <div class="form-group">
+                    <label>Release:</label>
+                    <input type="range" id="myinput" class="slider" min="0" max="1" step="0.01" value="0" v-model.number="form.releaseTime">
+                </div>
+                <button id="btn" class="btn btn-success" type="button" @click="start">Start sound</button>
+                <button id="btn" class="btn btn-danger" type="button" @click="stop">Stop sound</button>
+            </form>
+        </div>
+    </div>
+    <!-- the envelope use svg to display the path of the envelope -->
+    <script type="text/x-template" id="adsr">
+        <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" baseProfile="full">
+            <path :d="path" stroke="#666666" stroke-width="3" fill="none"></path>
+        </svg>
+    </script>
+</body>
+<!-- NOTE: javascript is loaded at the end because the framework need to read the HTML template content before -->
+<script src="lib/fuzzyis-v1.0.0.js"></script>
+<!-- import vue js framework -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- import our script -->
+<script src="include/javascript/main.js"></script>
+</html>
